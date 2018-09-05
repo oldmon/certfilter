@@ -4,22 +4,25 @@ from openpyxl import load_workbook
 from OpenSSL import SSL,crypto
 #please `pip install pyopenssl openpyxl` before running
 
-#prepare EV SSL oids
+#Global variables as settings
+GCIS_URL='http://data.gcis.nat.gov.tw/od/data/api/6BBA2268-1367-4B42-9CCA-BC17499EBE8C'
 evoidfile='evoid'
+
+#Print Usage
+if len(sys.argv)<2:
+	print('Usage: certfilter.py inputfile.xlsx')
+	sys.exit(1)
+	
+#prepare set for EVSSL oids
 with open(evoidfile)as f:
 	evoid=set(f.read().splitlines())
 f.close()
 
-#Usage
-if len(sys.argv)<2:
-    print('Usage: certfilter.py inputfile.xlsx')
-    sys.exit(1)
-
-#Files preparation
+#worksheet preparation
 input_file=sys.argv[1]
 in_wb=load_workbook(filename=input_file)
-
 in_ws=in_wb[in_wb.sheetnames[0]]
+
 #worker loop
 for row in range(2,in_ws.max_row+1):
 	host=in_ws['A'+str(row)].value
