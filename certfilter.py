@@ -39,4 +39,4 @@ for row in range(2,in_ws.max_row+1):
 	iss_cn=workcert.get_issuer().CN
 	notb=workcert.get_notBefore().decode('utf-8')
 	nota=workcert.get_notAfter().decode('utf-8')
-	print(host+'\t'+sub_c+'\t'+sub_c+'\t'+sub_c+'\t'+sub_c+'\t'+sub_c+'\t'+sub_c+'\t'+sub_c+'\t'+sub_c+'\t'+sub_c+'\t'+sub_c+'\t'+sub_c+'\t'+sub_c+'\t'+sub_c+'\t')
+	print(str(row)+'\t'+host+'\t'+sub_c+'\t'+sub_o+'\t'+sub_ou+'\t'+sub_cn+'\t'+iss_c+'\t'+iss_o+'\t'+iss_ou+'\t'+iss_cn+'\t'+str(notb)+'\t'+str(nota))
