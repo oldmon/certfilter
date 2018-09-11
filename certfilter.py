@@ -13,6 +13,12 @@ if len(sys.argv)<2:
 	print('Usage: certfilter.py inputfile.xlsx')
 	sys.exit(1)
 	
+#prevent empty extraction of cert element
+def xstr(s):
+	if s is None:
+		return ''
+	return str(s)
+
 #prepare set for EVSSL oids
 with open(evoidfile)as f:
 	evoid=set(f.read().splitlines())
@@ -39,4 +45,4 @@ for row in range(2,in_ws.max_row+1):
 	iss_cn=workcert.get_issuer().CN
 	notb=workcert.get_notBefore().decode('utf-8')
 	nota=workcert.get_notAfter().decode('utf-8')
-	print(str(row)+'\t'+host+'\t'+sub_c+'\t'+sub_o+'\t'+sub_ou+'\t'+sub_cn+'\t'+iss_c+'\t'+iss_o+'\t'+iss_ou+'\t'+iss_cn+'\t'+str(notb)+'\t'+str(nota))
+	print(str(row)+'\t'+host+'\t'+xstr(sub_c)+'\t'+xstr(sub_o)+'\t'+xstr(sub_ou)+'\t'+sub_cn+'\t'+iss_c+'\t'+iss_o+'\t'+xstr(iss_ou)+'\t'+iss_cn+'\t'+str(notb)+'\t'+str(nota))
