@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import sys,ssl
+import sys,ssl,traceback
 from openpyxl import load_workbook
 from OpenSSL import SSL,crypto
 #please `pip install pyopenssl openpyxl` before running
@@ -12,7 +12,7 @@ evoidfile='evoid'
 if len(sys.argv)<2:
 	print('Usage: certfilter.py inputfile.xlsx')
 	sys.exit(1)
-	
+
 #prevent empty extraction of cert element
 def xstr(s):
 	if s is None:
@@ -33,7 +33,13 @@ in_ws=in_wb[in_wb.sheetnames[0]]
 for row in range(2,in_ws.max_row+1):
 	host=in_ws['A'+str(row)].value
 	weight=in_ws['B'+str(row)].value
-	getcert=ssl.get_server_certificate((host,443))
+	try:
+		getcert=ssl.get_server_certificate((host,443))
+	except(ssl.SSLError,TimeoutError,ConnectionRefusedError):
+		sub_c=sub_o=sub_ou=sub_cn=iss_c=iss_o=iss_cn=iss_ou=nota=notb=''
+		exc_type,exc_value,exc_traceback=sys.exc_info()
+		lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
+		print(''.join('!! '+line for line in lines))
 	workcert=crypto.load_certificate(crypto.FILETYPE_PEM,getcert)
 	sub_c=workcert.get_subject().C
 	sub_o=workcert.get_subject().O
