@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import sys,ssl,socket,traceback
+import sys,ssl,socket,traceback,validators
 from openpyxl import load_workbook
 from OpenSSL import SSL,crypto
 #please `pip install pyopenssl openpyxl` before running
@@ -33,13 +33,14 @@ in_ws=in_wb[in_wb.sheetnames[0]]
 for row in range(1610,in_ws.max_row+1):
 	host=in_ws['A'+str(row)].value
 	weight=in_ws['B'+str(row)].value
-	try:
-		getcert=ssl.get_server_certificate((host,443))
-	except(ssl.SSLError,TimeoutError,ConnectionRefusedError,socket.gaierror,OSError):
-		sub_c=sub_o=sub_ou=sub_cn=iss_c=iss_o=iss_cn=iss_ou=nota=notb=''
-		exc_type,exc_value,exc_traceback=sys.exc_info()
-		lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
-		print(''.join('!! '+line for line in lines))
+	if validators.url('https://'+host)
+		try:
+			getcert=ssl.get_server_certificate((host,443))
+		except(ssl.SSLError,TimeoutError,ConnectionRefusedError,socket.gaierror,OSError):
+			sub_c=sub_o=sub_ou=sub_cn=iss_c=iss_o=iss_cn=iss_ou=nota=notb=None
+			exc_type,exc_value,exc_traceback=sys.exc_info()
+			lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
+			print(''.join('!! '+line for line in lines))
 	workcert=crypto.load_certificate(crypto.FILETYPE_PEM,getcert)
 	sub_c=workcert.get_subject().C
 	sub_o=workcert.get_subject().O
@@ -51,4 +52,4 @@ for row in range(1610,in_ws.max_row+1):
 	iss_cn=workcert.get_issuer().CN
 	notb=workcert.get_notBefore().decode('utf-8')
 	nota=workcert.get_notAfter().decode('utf-8')
-	print(str(row)+'\t'+host+'\t'+xstr(sub_c)+'\t'+xstr(sub_o)+'\t'+xstr(sub_ou)+'\t'+sub_cn+'\t'+xstr(iss_c)+'\t'+xstr(iss_o)+'\t'+xstr(iss_ou)+'\t'+xstr(iss_cn)+'\t'+str(notb)+'\t'+str(nota))
+	print(str(row)+'\t'+host+'\t'+xstr(sub_c)+'\t'+xstr(sub_o)+'\t'+xstr(sub_ou)+'\t'+xstr(sub_cn)+'\t'+xstr(iss_c)+'\t'+xstr(iss_o)+'\t'+xstr(iss_ou)+'\t'+xstr(iss_cn)+'\t'+xstr(notb)+'\t'+xstr(nota))
