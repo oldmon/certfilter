@@ -30,10 +30,10 @@ in_wb=load_workbook(filename=input_file)
 in_ws=in_wb[in_wb.sheetnames[0]]
 
 #worker loop
-for row in range(1610,in_ws.max_row+1):
+for row in range(1670,in_ws.max_row+1):
 	host=in_ws['A'+str(row)].value
 	weight=in_ws['B'+str(row)].value
-	if validators.url('https://'+host)
+	if validators.url('https://'+host):
 		try:
 			getcert=ssl.get_server_certificate((host,443))
 		except(ssl.SSLError,TimeoutError,ConnectionRefusedError,socket.gaierror,OSError):
