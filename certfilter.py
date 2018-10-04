@@ -30,10 +30,10 @@ in_wb=load_workbook(filename=input_file)
 in_ws=in_wb[in_wb.sheetnames[0]]
 
 #worker loop
-for row in range(1670,in_ws.max_row+1):
+for row in range(8965,in_ws.max_row+1):
 	host=in_ws['A'+str(row)].value
 	weight=in_ws['B'+str(row)].value
-	if validators.url('https://'+host):
+	if validators.url('https://'+xstr(host)):
 		try:
 			getcert=ssl.get_server_certificate((host,443))
 		except(ssl.SSLError,TimeoutError,ConnectionRefusedError,socket.gaierror,OSError):
@@ -52,4 +52,4 @@ for row in range(1670,in_ws.max_row+1):
 	iss_cn=workcert.get_issuer().CN
 	notb=workcert.get_notBefore().decode('utf-8')
 	nota=workcert.get_notAfter().decode('utf-8')
-	print(str(row)+'\t'+host+'\t'+xstr(sub_c)+'\t'+xstr(sub_o)+'\t'+xstr(sub_ou)+'\t'+xstr(sub_cn)+'\t'+xstr(iss_c)+'\t'+xstr(iss_o)+'\t'+xstr(iss_ou)+'\t'+xstr(iss_cn)+'\t'+xstr(notb)+'\t'+xstr(nota))
+	print(str(row)+'\t'+xstr(host)+'\t'+xstr(sub_c)+'\t'+xstr(sub_o)+'\t'+xstr(sub_ou)+'\t'+xstr(sub_cn)+'\t'+xstr(iss_c)+'\t'+xstr(iss_o)+'\t'+xstr(iss_ou)+'\t'+xstr(iss_cn)+'\t'+xstr(notb)+'\t'+xstr(nota))
