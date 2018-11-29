@@ -22,6 +22,7 @@ def xstr(s):
 #prepare set for EVSSL oids
 with open(evoidfile)as f:
 	evoid=set(f.read().splitlines())
+
 f.close()
 
 #worksheet preparation
