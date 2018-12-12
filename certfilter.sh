@@ -19,13 +19,13 @@ while read line;do
 	host=`echo $line|awk -F"," '{print $1}'`
 	power=`echo $line|awk -F"," '{print $2}'`
 	echo "#$counter Try $host ..."
-	curl -k -m 3 https://$host > /dev/null
+	curl -k -m 3 https://$host > /dev/null 2>&1
 	if [ $? -eq 0 ];then
 		echo |openssl s_client -connect $line:443 2>/dev/null|openssl x509 -out $certtemp
 		subject=`openssl x509 -noout -in $certtemp -subject|sed 's/subject=//'`
 		issuer=`openssl x509 -noout -in $certtemp -issuer|sed 's/issuer=//'`
 		startdate=`openssl x509 -noout -in $certtemp -startdate|sed 's/notBefore=//'
-		enddate=`openssl x509 -noout -in $certtemp -enddate|sed 's/notAfter=//'`
+		enddate=`openssl x509 -noout -in $certtemp -enddate|sed 's/notAfter=//'
 		openssl x509 -noout -in $certtemp -text|grep -f evoid >/dev/null
 		if [ $? -eq 0 ];then
 			EV='Y'
@@ -35,3 +35,4 @@ while read line;do
 		echo "$host,$subject,$issuer,$startdate,$enddate,$EV,$power"
 	fi
 done<$input
+
