@@ -8,9 +8,9 @@ while read line;do
 	let counter++
 done<$evfile
 
-for item in ${evoid[*]};do
-	echo $item
-done
+#for item in ${evoid[*]};do
+#	echo $item
+#done
 
 counter=0
 while read line;do
