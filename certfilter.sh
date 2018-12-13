@@ -8,9 +8,9 @@ while read line;do
 	let counter++
 done<$evfile
 
-#for item in ${evoid[*]};do
-#	echo $item
-#done
+for item in ${evoid[*]};do
+	echo $item
+done
 
 counter=0
 while read line;do
@@ -21,11 +21,11 @@ while read line;do
 	echo "#$counter Try $host ..."
 	curl -k -m 3 https://$host > /dev/null 2>&1
 	if [ $? -eq 0 ];then
-		echo |openssl s_client -connect $line:443 2>/dev/null|openssl x509 -out $certtemp
+		echo |openssl s_client -connect $host:443 2>/dev/null|openssl x509 -out $certtemp
 		subject=`openssl x509 -noout -in $certtemp -subject|sed 's/subject=//'`
 		issuer=`openssl x509 -noout -in $certtemp -issuer|sed 's/issuer=//'`
-		startdate=`openssl x509 -noout -in $certtemp -startdate|sed 's/notBefore=//'
-		enddate=`openssl x509 -noout -in $certtemp -enddate|sed 's/notAfter=//'
+		startdate=`openssl x509 -noout -in $certtemp -startdate|sed 's/notBefore=//'`
+		enddate=`openssl x509 -noout -in $certtemp -enddate|sed 's/notAfter=//'`
 		openssl x509 -noout -in $certtemp -text|grep -f evoid >/dev/null
 		if [ $? -eq 0 ];then
 			EV='Y'
