@@ -7,15 +7,14 @@ from OpenSSL import crypto
 # Global variables as settings
 GCIS_URL='http://data.gcis.nat.gov.tw/od/data/api/6BBA2268-1367-4B42-9CCA-BC17499EBE8C'
 evoidfile='evoid'
-timeout=4
-socket.setdefaulttimeout(timeout)
-headers={"Content-Type":"text/html"}
+TIMEOUT=4
+socket.setdefaulttimeout(TIMEOUT)
+headers={"User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 (.NET CLR 3.5.30729)"}
 
 # Print Usage
 if len(sys.argv)<2:
 	print('Usage: certfilter.py inputfile.xlsx')
 	sys.exit(1)
-
 
 # Prevent empty extraction of cert element
 def xstr(s):
@@ -23,9 +22,8 @@ def xstr(s):
 		return ''
 	return str(s)
 
-
 # Simeple way to check if host accept TLS connection
-def checkAlive(host='hicloud.hinet.net',port=443,timeout=3):
+def checkAlive(host='hicloud.hinet.net',port=443,timeout=TIMEOUT):
 	socket.setdefaulttimeout(timeout)
 	if validators.url('https://'+xstr(host)):
 		try:
@@ -37,26 +35,19 @@ def checkAlive(host='hicloud.hinet.net',port=443,timeout=3):
 	else:
 		return False
 
-
 # Fetch peer certificate from Internet by requests module override original
 HTTPResponse=requests.packages.urllib3.response.HTTPResponse
 orig_HTTPResponse__init__=HTTPResponse.__init__
-
-
 def new_HTTPResponse__init__(self,*args,**kwargs):
 	orig_HTTPResponse__init__(self,*args,**kwargs)
 	try:
 		self.peer_certificate=self._connection.peer_certificate
 	except AttributeError:
 		pass
+
 HTTPResponse.__init__=new_HTTPResponse__init__
-
 HTTPAdapter=requests.adapters.HTTPAdapter
-
-
 orig_HTTPAdapter_build_response=HTTPAdapter.build_response
-
-
 def new_HTTPAdapter_build_response(self,request,resp):
 	response=orig_HTTPAdapter_build_response(self,request,resp)
 	try:
@@ -65,9 +56,7 @@ def new_HTTPAdapter_build_response(self,request,resp):
 		pass
 	return response
 
-
 HTTPAdapter.build_response=new_HTTPAdapter_build_response
-
 HTTPSConnection=requests.packages.urllib3.connection.HTTPSConnection
 orig_HTTPSConnection_connect=HTTPSConnection.connect
 def new_HTTPSConnection_connect(self):
@@ -77,11 +66,15 @@ def new_HTTPSConnection_connect(self):
 	except AttributeError:
 		pass
 
-
 HTTPSConnection.connect=new_HTTPSConnection_connect
 
-
-#def certObj(host):
+def certObj(host):
+	if checkAlive(xstr(host)):
+		try:
+			r=requests.get('https://'+host,headers=headers,timeout=TIMEOUT)
+			return r
+		except AttributeError:
+			pass
 
 # Prepare set for EVSSL oids
 with open(evoidfile)as f:
@@ -100,7 +93,9 @@ for row in range(10,in_ws.max_row+1):
 	host=in_ws['A'+str(row)].value
 	weight=in_ws['B'+str(row)].value
 	if checkAlive(xstr(host)):
-		r=requests.get('https://'+host,headers=headers,timeout=4)
+		print(xstr(host))
+		r=certObj(xstr(host))
+		print(r)
 		sub_c=r.peer_certificate.get_subject().C
 		sub_o=r.peer_certificate.get_subject().O
 		sub_ou=r.peer_certificate.get_subject().OU
