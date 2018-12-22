@@ -12,8 +12,8 @@ GCIS_URL = 'http://data.gcis.nat.gov.tw/od/data/api/6BBA2268-1367-4B42-9CCA-BC17
 evoidfile = 'evoid'
 TIMEOUT = 4
 socket.setdefaulttimeout(TIMEOUT)
-headers = {"User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 ("
-           ".NET CLR 3.5.30729)"}
+#headers = {"User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 ("
+#           ".NET CLR 3.5.30729)"}
 
 # Print Usage
 if len(sys.argv) < 2:
@@ -88,6 +88,7 @@ HTTPSConnection.connect = new_HTTPSConnection_connect
 with open(evoidfile)as f:
 	evoid = set(f.read().splitlines())
 
+
 f.close()
 
 # Worksheet preparation
@@ -103,7 +104,7 @@ for row in range(10, in_ws.max_row + 1):
 	if checkalive(xstr(host)):
 		print(xstr(host))
 		try:
-			r = requests.get('https://' + host, headers=headers, timeout=TIMEOUT)
+			r = requests.get('https://' + host, timeout=TIMEOUT)
 			print(r)
 			sub_c = r.peer_certificate.get_subject().C
 			sub_o = r.peer_certificate.get_subject().O
