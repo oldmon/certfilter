@@ -5,7 +5,7 @@ import requests
 import validators
 from openpyxl import load_workbook
 
-# Please `pip install pyopenssl openpyxl validators requests` before running
+# Please `pip install openpyxl requests validators` before running
 
 # Global variables as settings
 GCIS_URL = 'http://data.gcis.nat.gov.tw/od/data/api/6BBA2268-1367-4B42-9CCA-BC17499EBE8C'
@@ -84,16 +84,6 @@ def new_HTTPSConnection_connect(self):
 
 HTTPSConnection.connect = new_HTTPSConnection_connect
 
-
-def certObj(host):
-	if checkalive(xstr(host)):
-		try:
-			r = requests.get('https://' + host, headers=headers, timeout=TIMEOUT)
-			return r
-		except AttributeError:
-			pass
-
-
 # Prepare set for EVSSL oids
 with open(evoidfile)as f:
 	evoid = set(f.read().splitlines())
@@ -112,18 +102,21 @@ for row in range(10, in_ws.max_row + 1):
 	weight = in_ws['B' + str(row)].value
 	if checkalive(xstr(host)):
 		print(xstr(host))
-		r = certObj(xstr(host))
-		print(r)
-		sub_c = r.peer_certificate.get_subject().C
-		sub_o = r.peer_certificate.get_subject().O
-		sub_ou = r.peer_certificate.get_subject().OU
-		sub_cn = r.peer_certificate.get_subject().CN
-		iss_c = r.peer_certificate.get_issuer().C
-		iss_o = r.peer_certificate.get_issuer().O
-		iss_ou = r.peer_certificate.get_issuer().OU
-		iss_cn = r.peer_certificate.get_issuer().CN
-		notb = r.peer_certificate.get_notBefore().decode('utf-8')
-		nota = r.peer_certificate.get_notAfter().decode('utf-8')
-		print(str(row) + ',' + xstr(host) + ',' + xstr(sub_c) + ',' + xstr(sub_o) + ',' + xstr(sub_ou) + ',' + xstr(
-			sub_cn) + ',' + xstr(iss_c) + ',' + xstr(iss_o) + ',' + xstr(iss_ou) + ',' + xstr(iss_cn) + ',' + xstr(
-			notb) + ',' + xstr(nota))
+		try:
+			r = requests.get('https://' + host, headers=headers, timeout=TIMEOUT)
+			print(r)
+			sub_c = r.peer_certificate.get_subject().C
+			sub_o = r.peer_certificate.get_subject().O
+			sub_ou = r.peer_certificate.get_subject().OU
+			sub_cn = r.peer_certificate.get_subject().CN
+			iss_c = r.peer_certificate.get_issuer().C
+			iss_o = r.peer_certificate.get_issuer().O
+			iss_ou = r.peer_certificate.get_issuer().OU
+			iss_cn = r.peer_certificate.get_issuer().CN
+			notb = r.peer_certificate.get_notBefore().decode('utf-8')
+			nota = r.peer_certificate.get_notAfter().decode('utf-8')
+			print(str(row) + ',' + xstr(host) + ',' + xstr(sub_c) + ',' + xstr(sub_o) + ',' + xstr(sub_ou) + ',' + xstr(
+				sub_cn) + ',' + xstr(iss_c) + ',' + xstr(iss_o) + ',' + xstr(iss_ou) + ',' + xstr(iss_cn) + ',' + xstr(
+				notb) + ',' + xstr(nota))
+		except AttributeError:
+			pass
