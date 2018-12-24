@@ -48,8 +48,7 @@ def isalive(host='hicloud.hinet.net', port=443, timeout=TIMEOUT):
 		try:
 			socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
 			return True
-		except Exception as ex:
-			print(ex.message)
+		except:
 			return False
 	else:
 		return False
@@ -103,7 +102,7 @@ in_wb = load_workbook(filename=input_file)
 in_ws = in_wb[in_wb.sheetnames[0]]
 
 # Worker loop
-for row in range(10, in_ws.max_row + 1):
+for row in range(2, in_ws.max_row + 1):
 	sub_c = sub_o = sub_ou = sub_cn = iss_c = iss_o = iss_cn = iss_ou = nota = notb = None
 	host = in_ws['A' + str(row)].value
 	weight = in_ws['B' + str(row)].value
@@ -111,7 +110,6 @@ for row in range(10, in_ws.max_row + 1):
 		print(xstr(host))
 		try:
 			r = requests.get('https://' + host, timeout=TIMEOUT)
-			print(r)
 			sub_c = r.peer_certificate.get_subject().C
 			sub_o = r.peer_certificate.get_subject().O
 			sub_ou = r.peer_certificate.get_subject().OU
@@ -125,5 +123,5 @@ for row in range(10, in_ws.max_row + 1):
 			print(str(row) + ',' + xstr(host) + ',' + xstr(sub_c) + ',' + xstr(sub_o) + ',' + xstr(sub_ou) + ',' + xstr(
 				sub_cn) + ',' + xstr(iss_c) + ',' + xstr(iss_o) + ',' + xstr(iss_ou) + ',' + xstr(iss_cn) + ',' + xstr(
 				notb) + ',' + xstr(nota))
-		except AttributeError:
+		except:
 			pass
