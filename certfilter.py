@@ -13,7 +13,7 @@ evoidfile = 'evoid'
 blacklistf = 'blacklist'
 TIMEOUT = 4
 socket.setdefaulttimeout(TIMEOUT)
-#headers = {"User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 ("
+# headers = {"User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 ("
 #           ".NET CLR 3.5.30729)"}
 
 # Print Usage
@@ -25,12 +25,11 @@ if len(sys.argv) < 2:
 with open(evoidfile)as f:
 	evoid = set(f.read().splitlines())
 
-
 with open(blacklistf)as f:
 	blacklist = set(f.read().splitlines())
 
-
 f.close()
+
 
 # Prevent empty extraction of cert element
 def xstr(s):
@@ -96,14 +95,31 @@ def new_HTTPSConnection_connect(self):
 
 HTTPSConnection.connect = new_HTTPSConnection_connect
 
+
+# Get Business_Accounting_NO from gcis
+def getbano(corporate):
+	if corporate is None:
+		return None
+	else:
+		try:
+			gcisapi = 'http://data.gcis.nat.gov.tw/od/data/api/6BBA2268-1367-4B42-9CCA-BC17499EBE8C?$format=json&$filter=Company_Name like ' + corporate + ' and Company_Status eq 01&$skip=0&$top=1'
+			# https://data.gcis.nat.gov.tw/od/demo_cond/6BBA2268-1367-4B42-9CCA-BC17499EBE8C for reference
+			r = requests.get(gcisapi)
+			js = json.loads(r.text)
+			bano = js[0]['Business_Accounting_NO']
+			return bano
+		except:
+			return None
+
+
 # Worksheet preparation
 input_file = sys.argv[1]
 in_wb = load_workbook(filename=input_file)
 in_ws = in_wb[in_wb.sheetnames[0]]
 
 # Worker loop
-for row in range(2, in_ws.max_row + 1):
-	sub_c = sub_o = sub_ou = sub_cn = iss_c = iss_o = iss_cn = iss_ou = nota = notb = None
+for row in range(12700, in_ws.max_row + 1):
+	sub_c = sub_o = sub_ou = sub_cn = iss_c = iss_o = iss_cn = iss_ou = nota = notb = bano = None
 	host = in_ws['A' + str(row)].value
 	weight = in_ws['B' + str(row)].value
 	if isalive(xstr(host)):
@@ -120,6 +136,7 @@ for row in range(2, in_ws.max_row + 1):
 			iss_cn = r.peer_certificate.get_issuer().CN
 			notb = r.peer_certificate.get_notBefore().decode('utf-8')
 			nota = r.peer_certificate.get_notAfter().decode('utf-8')
+			bano = getbano(sub_o)
 			print(str(row) + ',' + xstr(host) + ',' + xstr(sub_c) + ',' + xstr(sub_o) + ',' + xstr(sub_ou) + ',' + xstr(
 				sub_cn) + ',' + xstr(iss_c) + ',' + xstr(iss_o) + ',' + xstr(iss_ou) + ',' + xstr(iss_cn) + ',' + xstr(
 				notb) + ',' + xstr(nota))
