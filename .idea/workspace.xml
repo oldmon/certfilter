@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="de27a107-fd74-47b0-99bc-802a402e05d4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/certfilter.py" beforeDir="false" afterPath="$PROJECT_DIR$/certfilter.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/certfilter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="486">
-              <caret line="143" lean-forward="true" selection-start-line="143" selection-end-line="143" />
+            <state relative-caret-position="296">
+              <caret line="132" column="18" lean-forward="true" selection-start-line="132" selection-start-column="12" selection-end-line="132" selection-end-column="18" />
               <folding>
                 <element signature="e#23#36#0" expanded="true" />
               </folding>
@@ -101,6 +102,14 @@
       <option name="presentableId" value="Default" />
       <updated>1545447619821</updated>
     </task>
+    <task id="LOCAL-00001" summary="add print bano">
+      <created>1545724391728</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1545724391728</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -119,18 +128,23 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.32923076" />
       <window_info anchor="bottom" id="Python Console" order="10" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
   </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
+    <MESSAGE value="add print bano" />
+    <option name="LAST_COMMIT_MESSAGE" value="add print bano" />
+  </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/certfilter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="143" lean-forward="true" selection-start-line="143" selection-end-line="143" />
+        <state relative-caret-position="296">
+          <caret line="132" column="18" lean-forward="true" selection-start-line="132" selection-start-column="12" selection-end-line="132" selection-end-column="18" />
           <folding>
             <element signature="e#23#36#0" expanded="true" />
           </folding>

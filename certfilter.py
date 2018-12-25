@@ -117,18 +117,20 @@ in_wb = load_workbook(filename=input_file)
 in_ws = in_wb[in_wb.sheetnames[0]]
 
 # Worker loop
-for row in range(12700, in_ws.max_row + 1):
+for row in range(2, in_ws.max_row + 1):
 	sub_c = sub_o = sub_ou = sub_cn = iss_c = iss_o = iss_cn = iss_ou = nota = notb = bano = None
 	host = in_ws['A' + str(row)].value
 	weight = in_ws['B' + str(row)].value
 	if isalive(xstr(host)):
-		print(xstr(host))
 		try:
 			r = requests.get('https://' + host, timeout=TIMEOUT)
 			sub_c = r.peer_certificate.get_subject().C
 			sub_o = r.peer_certificate.get_subject().O
 			sub_ou = r.peer_certificate.get_subject().OU
 			sub_cn = r.peer_certificate.get_subject().CN
+			sub_l = r.peer_certificate.get_subject().L
+			sub_st = r.peer_certificate.get_subject().ST
+			sub_pc = r.peer_certificate.get_subject().postalCode
 			iss_c = r.peer_certificate.get_issuer().C
 			iss_o = r.peer_certificate.get_issuer().O
 			iss_ou = r.peer_certificate.get_issuer().OU
