@@ -3,18 +3,16 @@ import socket
 import sys
 import requests
 import validators
+import json
 from openpyxl import load_workbook
 
 # Please `pip install openpyxl requests validators` before running
 
 # Global variables as settings
-GCIS_URL = 'http://data.gcis.nat.gov.tw/od/data/api/6BBA2268-1367-4B42-9CCA-BC17499EBE8C'
 evoidfile = 'evoid'
 blacklistf = 'blacklist'
 TIMEOUT = 4
 socket.setdefaulttimeout(TIMEOUT)
-# headers = {"User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 ("
-#           ".NET CLR 3.5.30729)"}
 
 # Print Usage
 if len(sys.argv) < 2:
@@ -102,12 +100,13 @@ def getbano(corporate):
 		return None
 	else:
 		try:
-			gcisapi = 'http://data.gcis.nat.gov.tw/od/data/api/6BBA2268-1367-4B42-9CCA-BC17499EBE8C?$format=json&$filter=Company_Name like ' + corporate + ' and Company_Status eq 01&$skip=0&$top=1'
+			gcisapi = 'http://data.gcis.nat.gov.tw/od/data/api/6BBA2268-1367-4B42-9CCA-BC17499EBE8C?$format=json' \
+			          '&$filter=Company_Name like ' + corporate + ' and Company_Status eq 01&$skip=0&$top=1 '
 			# https://data.gcis.nat.gov.tw/od/demo_cond/6BBA2268-1367-4B42-9CCA-BC17499EBE8C for reference
 			r = requests.get(gcisapi)
 			js = json.loads(r.text)
-			bano = js[0]['Business_Accounting_NO']
-			return bano
+			no = js[0]['Business_Accounting_NO']
+			return no
 		except:
 			return None
 
@@ -139,6 +138,6 @@ for row in range(12700, in_ws.max_row + 1):
 			bano = getbano(sub_o)
 			print(str(row) + ',' + xstr(host) + ',' + xstr(sub_c) + ',' + xstr(sub_o) + ',' + xstr(sub_ou) + ',' + xstr(
 				sub_cn) + ',' + xstr(iss_c) + ',' + xstr(iss_o) + ',' + xstr(iss_ou) + ',' + xstr(iss_cn) + ',' + xstr(
-				notb) + ',' + xstr(nota))
+				notb) + ',' + xstr(nota) + ',' + xstr(bano))
 		except:
 			pass
