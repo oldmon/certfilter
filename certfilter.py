@@ -101,7 +101,7 @@ def getbano(corporate):
 	else:
 		try:
 			gcisapi = 'http://data.gcis.nat.gov.tw/od/data/api/6BBA2268-1367-4B42-9CCA-BC17499EBE8C?$format=json' \
-			          '&$filter=Company_Name like ' + corporate + ' and Company_Status eq 01&$skip=0&$top=1 '
+			          '&$filter=Company_Name like ' + corporate + ' and Company_Status eq 01&$skip=0&$top=1'
 			# https://data.gcis.nat.gov.tw/od/demo_cond/6BBA2268-1367-4B42-9CCA-BC17499EBE8C for reference
 			r = requests.get(gcisapi)
 			js = json.loads(r.text)
