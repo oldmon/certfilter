@@ -45,7 +45,7 @@ def isalive(host='hicloud.hinet.net', port=443, timeout=TIMEOUT):
 		try:
 			socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
 			return True
-		except:
+		except Exception:
 			return False
 	else:
 		return False
@@ -107,7 +107,7 @@ def getbano(corporate):
 			js = json.loads(r.text)
 			no = js[0]['Business_Accounting_NO']
 			return no
-		except:
+		except Exception:
 			return None
 
 
@@ -141,5 +141,5 @@ for row in range(2, in_ws.max_row + 1):
 			print(str(row) + ',' + xstr(host) + ',' + xstr(sub_c) + ',' + xstr(sub_o) + ',' + xstr(sub_ou) + ',' + xstr(
 				sub_cn) + ',' + xstr(iss_c) + ',' + xstr(iss_o) + ',' + xstr(iss_ou) + ',' + xstr(iss_cn) + ',' + xstr(
 				notb) + ',' + xstr(nota) + ',' + xstr(bano))
-		except:
+		except Exception:
 			pass
