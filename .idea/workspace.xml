@@ -16,11 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/certfilter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="353">
-              <caret line="107" column="48" lean-forward="true" selection-start-line="105" selection-start-column="12" selection-end-line="107" selection-end-column="48" />
-              <folding>
-                <element signature="e#23#36#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="3135">
+              <caret line="170" lean-forward="true" selection-start-line="170" selection-end-line="170" />
             </state>
           </provider>
         </entry>
@@ -30,6 +27,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>timeout</find>
+      <find>except</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -42,7 +40,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
     <option name="x" value="10" />
     <option name="y" value="20" />
     <option name="width" value="1346" />
@@ -116,11 +114,25 @@
       <option name="project" value="LOCAL" />
       <updated>1545731687994</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="remove excess space">
+      <created>1545805480010</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1545805480010</updated>
+    </task>
+    <task id="LOCAL-00004" summary="change in exception">
+      <created>1545806882489</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1545806882489</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
+    <frame x="10" y="20" width="1346" height="728" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
@@ -135,7 +147,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.32923076" />
+      <window_info active="true" anchor="bottom" id="Event Log" order="9" side_tool="true" visible="true" weight="0.32828283" />
       <window_info anchor="bottom" id="Python Console" order="10" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -143,19 +155,18 @@
     </layout>
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="add print bano" />
     <MESSAGE value="more for detect certtype" />
-    <option name="LAST_COMMIT_MESSAGE" value="more for detect certtype" />
+    <MESSAGE value="remove excess space" />
+    <MESSAGE value="change in exception" />
+    <option name="LAST_COMMIT_MESSAGE" value="change in exception" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/certfilter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="107" column="48" lean-forward="true" selection-start-line="105" selection-start-column="12" selection-end-line="107" selection-end-column="48" />
-          <folding>
-            <element signature="e#23#36#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="3135">
+          <caret line="170" lean-forward="true" selection-start-line="170" selection-end-line="170" />
         </state>
       </provider>
     </entry>

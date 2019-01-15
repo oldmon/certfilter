@@ -118,7 +118,7 @@ in_ws = in_wb[in_wb.sheetnames[0]]
 
 # Worker loop
 for row in range(2, in_ws.max_row + 1):
-	sub_c = sub_o = sub_ou = sub_cn = iss_c = iss_o = iss_cn = iss_ou = nota = notb = bano = None
+	sub_c = sub_o = sub_ou = sub_cn = sub_l = sub_st = sub_pc = iss_c = iss_o = iss_ou = iss_cn = nota = notb = bano = certtype = None
 	host = in_ws['A' + str(row)].value
 	weight = in_ws['B' + str(row)].value
 	if isalive(xstr(host)):
@@ -135,11 +135,36 @@ for row in range(2, in_ws.max_row + 1):
 			iss_o = r.peer_certificate.get_issuer().O
 			iss_ou = r.peer_certificate.get_issuer().OU
 			iss_cn = r.peer_certificate.get_issuer().CN
-			notb = r.peer_certificate.get_notBefore().decode('utf-8')
-			nota = r.peer_certificate.get_notAfter().decode('utf-8')
+			notb = r.peer_certificate.get_notBefore().decode()
+			nota = r.peer_certificate.get_notAfter().decode()
 			bano = getbano(sub_o)
+			cert = r.peer_certificate.to_cryptography()
+			policy = cert.extensions.get_extension_for_class(x509.CertificatePolicies)
+			for i in range(len(policy.value) - 1, -1, -1):
+				if policy.value[i].policy_qualifiers is None:
+					certtype = \
+						{'2.23.140.1.1': 'EV', '2.23.140.1.2.1': 'DV', '2.23.140.1.2.2': 'OV', '2.23.140.1.2.3': 'IV'}[
+							policy.value[i].policy_identifier.dotted_string]
+					break
+				elif policy.value[i].policy_identifier.dotted_string in evoid:
+					certtype = 'EV'
+					break
+				elif sub_o == sub_cn or 'Domain Control Validated' in sub_ou:
+					if sub_l is None and sub_st is None and sub_pc is None:
+						certtype = 'DV'
+						break
+				elif sub_o is None and iss_o is 'StartCom':
+					certtype = 'DV'
+					break
+
+			if certtype is None:
+				if sub_o is None:
+					certtype = 'DV'
+				else:
+					certtype = 'OV'
+
 			print(str(row) + ',' + xstr(host) + ',' + xstr(sub_c) + ',' + xstr(sub_o) + ',' + xstr(sub_ou) + ',' + xstr(
 				sub_cn) + ',' + xstr(iss_c) + ',' + xstr(iss_o) + ',' + xstr(iss_ou) + ',' + xstr(iss_cn) + ',' + xstr(
-				notb) + ',' + xstr(nota) + ',' + xstr(bano))
+				notb) + ',' + xstr(nota) + ',' + xstr(bano) + ',' + xstr(certtype))
 		except Exception:
 			pass
