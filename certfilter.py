@@ -5,6 +5,7 @@ import requests
 import validators
 import json
 from openpyxl import load_workbook
+from cryptography import x509
 
 # Please `pip install openpyxl requests validators` before running
 
