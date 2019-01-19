@@ -184,5 +184,9 @@ for row in range(2, in_ws.max_row + 1):
 
 		except Exception:
 			pass
-
+	else:
+		print(str(row) + ',' + xstr(host) + 'Not Available')
+		content = [host, None, None, None, None, None, None, None, None, None, None, None, weight, None]
+		for i in range(14):
+			out_ws[column[i] + str(row)] = content[i]
 out_wb.save(filename=output_name)
