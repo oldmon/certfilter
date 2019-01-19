@@ -4,7 +4,7 @@ import sys
 import requests
 import validators
 import json
-from openpyxl import load_workbook
+from openpyxl import load_workbook, Workbook
 from cryptography import x509
 
 # Please `pip install openpyxl requests validators` before running
@@ -16,8 +16,8 @@ TIMEOUT = 4
 socket.setdefaulttimeout(TIMEOUT)
 
 # Print Usage
-if len(sys.argv) < 2:
-	print('Usage: certfilter.py inputfile.xlsx')
+if len(sys.argv) < 3:
+	print('Usage: certfilter.py inputfile.xlsx outputfile.xlsx')
 	sys.exit(1)
 
 # Prepare set for EVSSL oids
@@ -28,6 +28,9 @@ with open(blacklistf)as f:
 	blacklist = set(f.read().splitlines())
 
 f.close()
+column = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N')
+title = ('Host', 'Subject C', 'Subject O', 'Subject OU', 'Subject CN', 'Issuer C', 'Issuer O', 'Issuer OU', 'Issuer CN',
+         'notBefore', 'notAfter', 'certType', 'weight', 'taxId')
 
 
 # Prevent empty extraction of cert element
@@ -38,13 +41,13 @@ def xstr(s):
 
 
 # Simple way to check if host accept TLS connection
-def isalive(host='hicloud.hinet.net', port=443, timeout=TIMEOUT):
+def isalive(fqdn='hicloud.hinet.net', port=443, timeout=TIMEOUT):
 	socket.setdefaulttimeout(timeout)
-	if host in blacklist:
+	if fqdn in blacklist:
 		return False
-	elif validators.url('https://' + xstr(host)):
+	elif validators.url('https://' + xstr(fqdn)):
 		try:
-			socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
+			socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((fqdn, port))
 			return True
 		except Exception:
 			return False
@@ -113,9 +116,15 @@ def getbano(corporate):
 
 
 # Worksheet preparation
+out_wb = Workbook()
 input_file = sys.argv[1]
+output_name = sys.argv[2]
 in_wb = load_workbook(filename=input_file)
 in_ws = in_wb[in_wb.sheetnames[0]]
+out_ws = out_wb.active
+out_ws.title = 'scanned_result'
+for i in range(14):
+	out_ws[column[i] + str(1)] = title[i]
 
 # Worker loop
 for row in range(2, in_ws.max_row + 1):
@@ -166,6 +175,24 @@ for row in range(2, in_ws.max_row + 1):
 
 			print(str(row) + ',' + xstr(host) + ',' + xstr(sub_c) + ',' + xstr(sub_o) + ',' + xstr(sub_ou) + ',' + xstr(
 				sub_cn) + ',' + xstr(iss_c) + ',' + xstr(iss_o) + ',' + xstr(iss_ou) + ',' + xstr(iss_cn) + ',' + xstr(
-				notb) + ',' + xstr(nota) + ',' + xstr(bano) + ',' + xstr(certtype))
+				notb) + ',' + xstr(nota) + ',' + str(certtype) + ',' + str(weight) + ',' + xstr(bano))
+
+			content = [host, sub_c, sub_o, sub_ou, sub_cn, iss_c, iss_o, iss_ou, iss_cn, notb, nota, certtype, weight,
+			           bano]
+			for i in range(14):
+				out_ws[column[i] + str(row)] = content[i]
+
 		except Exception:
+			print(str(row) + ',' + xstr(host) + ', Not Available')
+			content = [host, None, None, None, None, None, None, None, None, None, None, None, weight, None]
+			for i in range(14):
+				out_ws[column[i] + str(row)] = content[i]
 			pass
+
+	else:
+		print(str(row) + ',' + xstr(host) + ', Not Available')
+		content = [host, None, None, None, None, None, None, None, None, None, None, None, weight, None]
+		for i in range(14):
+			out_ws[column[i] + str(row)] = content[i]
+
+out_wb.save(filename=output_name)
