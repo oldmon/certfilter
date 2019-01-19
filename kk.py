@@ -183,9 +183,12 @@ for row in range(2, in_ws.max_row + 1):
 				out_ws[column[i] + str(row)] = content[i]
 
 		except Exception:
-			pass
+			print(str(row) + ',' + xstr(host) + ', Not Available')
+			content = [host, None, None, None, None, None, None, None, None, None, None, None, weight, None]
+			for i in range(14):
+				out_ws[column[i] + str(row)] = content[i]
 	else:
-		print(str(row) + ',' + xstr(host) + 'Not Available')
+		print(str(row) + ',' + xstr(host) + ', Not Available')
 		content = [host, None, None, None, None, None, None, None, None, None, None, None, weight, None]
 		for i in range(14):
 			out_ws[column[i] + str(row)] = content[i]
