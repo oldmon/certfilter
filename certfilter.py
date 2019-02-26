@@ -4,6 +4,7 @@ import sys
 import requests
 import validators
 import json
+import logging
 from openpyxl import load_workbook, Workbook
 from cryptography import x509
 
@@ -12,8 +13,9 @@ from cryptography import x509
 # Global variables as settings
 evoidfile = 'evoid'
 blacklistf = 'blacklist'
-TIMEOUT = 4
+TIMEOUT = 2
 socket.setdefaulttimeout(TIMEOUT)
+logging.basicConfig(filename='progress.log',format='%(asctime)s %(message)s')
 
 # Print Usage
 if len(sys.argv) < 3:
@@ -173,9 +175,9 @@ for row in range(2, in_ws.max_row + 1):
 				else:
 					certtype = 'OV'
 
-			print(str(row) + ',' + xstr(host) + ',' + xstr(sub_c) + ',' + xstr(sub_o) + ',' + xstr(sub_ou) + ',' + xstr(
+			'''print(str(row) + ',' + xstr(host) + ',' + xstr(sub_c) + ',' + xstr(sub_o) + ',' + xstr(sub_ou) + ',' + xstr(
 				sub_cn) + ',' + xstr(iss_c) + ',' + xstr(iss_o) + ',' + xstr(iss_ou) + ',' + xstr(iss_cn) + ',' + xstr(
-				notb) + ',' + xstr(nota) + ',' + str(certtype) + ',' + str(weight) + ',' + xstr(bano))
+				notb) + ',' + xstr(nota) + ',' + str(certtype) + ',' + str(weight) + ',' + xstr(bano))'''
 
 			content = [host, sub_c, sub_o, sub_ou, sub_cn, iss_c, iss_o, iss_ou, iss_cn, notb, nota, certtype, weight,
 			           bano]
@@ -183,16 +185,17 @@ for row in range(2, in_ws.max_row + 1):
 				out_ws[column[i] + str(row)] = content[i]
 
 		except Exception:
-			print(str(row) + ',' + xstr(host) + ', Not Available')
+			#print(str(row) + ',' + xstr(host) + ', Not Available')
 			content = [host, None, None, None, None, None, None, None, None, None, None, None, weight, None]
 			for i in range(14):
 				out_ws[column[i] + str(row)] = content[i]
 			pass
 
 	else:
-		print(str(row) + ',' + xstr(host) + ', Not Available')
+		#print(str(row) + ',' + xstr(host) + ', Not Available')
 		content = [host, None, None, None, None, None, None, None, None, None, None, None, weight, None]
 		for i in range(14):
 			out_ws[column[i] + str(row)] = content[i]
-
+	if row % 512 == 2:
+		logging.warning(str(row)+'/'+str(in_ws.max_row + 1))
 out_wb.save(filename=output_name)
